@@ -11,16 +11,28 @@ export default{
   },
   setup(){
     const data=ref([])
+    const edit=ref(false)
+    const preloadData=ref(null)
+    let id = ref(null)
     function getAll(){
       data.value= BD.getAll()
     }
-    function create(data){
-      BD.create(data)
+    function create(_data){
+      BD.create(_data)
       getAll()
     }
-    function deleteData(id){
-      BD.delete(id)
+    function editEntry(_data){
+      BD.update(id.value,_data)
       getAll()
+      edit.value=false
+    }
+    function deleteData(_id){
+      BD.delete(_id)
+      getAll()
+    }
+    function update(_id){
+      id.value=_id
+      edit.value=true
     }
     onBeforeMount(()=>{
       getAll()
@@ -29,15 +41,19 @@ export default{
       getAll,
       deleteData,
       create,
-      data
+      update,
+      editEntry,
+      preloadData,
+      data,
+      edit,
     }
   }
 } 
 
 </script>
 <template>
-  <DataForm @save="create"/>
-  <DataTable :dataList="data" @delete="deleteData"/>
+  <DataForm :edit="edit" @save="create" @edit="editEntry" />
+  <DataTable :dataList="data"  @delete="deleteData" @update="update"/>
 </template>
 
 <style>

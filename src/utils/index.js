@@ -11,7 +11,11 @@ const DATA={
     },
     update(id,data){
         const bd=JSON.parse(localStorage.getItem('data'))
-        bd[id]=data
+        Object.keys(data).forEach(dataField =>{
+            if(!!data[dataField]){
+                bd[id][dataField]=data[dataField]
+            }
+        })
         localStorage.setItem('data',JSON.stringify(bd))
     },
     getAll(){
@@ -20,7 +24,7 @@ const DATA={
     },
     getOne(id){
         const bd=JSON.parse(localStorage.getItem('data'))
-        return bd[id]=data
+        return bd[id]
     }
 }
 export default DATA

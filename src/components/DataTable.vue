@@ -35,9 +35,6 @@
 <script>
 export default{
     props:['dataList'],
-    setup(props){
-        console.log(props.dataList)
-    }
 }
 </script>
 <style>

@@ -1,7 +1,7 @@
 <template>
     <div class="main">
-        <h1>Create Entry</h1>
-        <form @submit.prevent="$emit('save',data)">
+        <h1>{{edit? 'Edit':'Create'}} Entry</h1>
+        <form @submit.prevent="action">
             <div class="row">
                 <div>
                     <label for="">Nombre actividad</label>
@@ -40,17 +40,17 @@
                     </select>
                 </div>
                 <div>
-                    <button class="form-btn" type="submit">Guardar</button>
+                    <button class="form-btn" type="submit">{{edit? 'Edit':'Create'}}</button>
                 </div>
             </div>
         </form>
     </div>
 </template>
 <script>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 export default{
-    props:['preload'],
-    setup(props){
+    props:['edit'],
+    setup(props,{emit}){
         const expertise_list = ref([
             "Artes plásticas",
             "Teatro",
@@ -77,7 +77,7 @@ export default{
             "BUENAVENTURA",
             "BUGA"
         ])
-        const data = ref({
+        const cleanData ={
             activity_name:'',
             activity_date:'',
             start_time:'',
@@ -85,8 +85,17 @@ export default{
             expertise:'',
             nac:'',
             cultural_right:'',
-        })
+        }
+        const data = ref(cleanData)
+        function action(){
+            const d=data.value
+            data.value={}
+            console.log(data.value)
+            emit(props.edit? 'edit':'save',d)
+        }
+        
         return {
+            action,
             data,
             nac_list,
             expertise_list,
